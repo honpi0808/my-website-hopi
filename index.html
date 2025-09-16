@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+   <meta charset="utf-8">
+   <title>情報表現IE</title>
+   <link href="style.css" rel="stylesheet" />
+   <style>
+      body {
+         font-family: "Hiragino Kaku Gothic Pro W6", "ヒラギノ角ゴ Pro W6", sans-serif;
+         margin: 0;
+         padding: 0;
+      }
+
+      /* スライダー専用CSS */
+      .musabi-slider {
+        position: relative;
+        max-width: 1000px;
+        margin: auto;
+        overflow: hidden;
+        background: #000;
+        border-radius: 6px;
+      }
+      .musabi-slides {
+        display: flex;
+        transition: transform 0.6s ease;
+      }
+      .musabi-slides img {
+        width: 100%;
+        flex-shrink: 0;
+        height: auto;
+        border-radius: 6px;
+        object-fit: cover;
+      }
+      /* 矢印 */
+      .musabi-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 40px;
+        color: white;
+        background: rgba(0,0,0,0.3);
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 50%;
+        user-select: none;
+        z-index: 10;
+      }
+      .musabi-arrow:hover {
+        background: rgba(0,0,0,0.6);
+      }
+      .musabi-left {
+        left: 15px;
+      }
+      .musabi-right {
+        right: 15px;
+      }
+   </style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+   <header>
+      <img src="./00image/SVG/logo.svg" width="150" alt="">
+      <nav>
+         <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="cube.html">Cube</a></li>
+            <li><a href="logo.html">Logo</a></li>
+            <li><a href="catalog.html">Catalog</a></li>
+            <li><a href="leaflet.html">Leaflet</a></li>
+            <li><a href="profile.html">Profile</a></li>
+         </ul>
+      </nav>
+   </header>
+
+   <main>
+      <!-- ▼ スライダー開始 ▼ -->
+       <h1>HOME</h1>
+      <div class="musabi-slider">
+         <span class="musabi-arrow musabi-left">&#10094;</span>
+         <span class="musabi-arrow musabi-right">&#10095;</span>
+         <div class="musabi-slides">
+            <img src="00image/top/IMG_1947.jpeg" alt="画像1">
+            <img src="00image/top/IMG_6268.jpeg" alt="画像2">
+            <img src="00image/top/IMG_6964.jpg" alt="画像3">
+            <img src="00image/top/IMG_5780.jpeg" alt="画像4">
+         </div>
+      </div>
+      <p>前期３課題紹介</p>
+      <!-- ▲ スライダー終了 ▲ -->
+   </main>
+
+   <footer>
+      <p>© 情報表現IE　空間デザイン学科　1年　本田旭</p>
+   </footer>
+
+</div><!-- wrapper -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const slides = document.querySelector('.musabi-slides');
+  const slideImages = document.querySelectorAll('.musabi-slides img');
+  const prev = document.querySelector('.musabi-left');
+  const next = document.querySelector('.musabi-right');
+
+  let counter = 0;
+  let autoSlideInterval;
+
+  function showSlide(index) {
+    if (index < 0) {
+      counter = slideImages.length - 1;
+    } else if (index >= slideImages.length) {
+      counter = 0;
+    } else {
+      counter = index;
+    }
+    slides.style.transform = `translateX(${-counter * 100}%)`;
+  }
+
+  function nextSlide() {
+    showSlide(counter + 1);
+  }
+
+  function prevSlide() {
+    showSlide(counter - 1);
+  }
+
+  function startAutoSlide() {
+    autoSlideInterval = setInterval(nextSlide, 5000);
+  }
+
+  function stopAutoSlide() {
+    clearInterval(autoSlideInterval);
+  }
+
+  prev.addEventListener('click', () => {
+    stopAutoSlide();
+    prevSlide();
+    startAutoSlide();
+  });
+
+  next.addEventListener('click', () => {
+    stopAutoSlide();
+    nextSlide();
+    startAutoSlide();
+  });
+
+  // スワイプ対応
+  let startX = 0;
+  let endX = 0;
+
+  slides.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    stopAutoSlide();
+  });
+
+  slides.addEventListener('touchmove', (e) => {
+    endX = e.touches[0].clientX;
+  });
+
+  slides.addEventListener('touchend', () => {
+    if (startX - endX > 50) {
+      nextSlide();
+    } else if (endX - startX > 50) {
+      prevSlide();
+    }
+    startAutoSlide();
+  });
+
+  // 初期表示
+  showSlide(0);
+  startAutoSlide();
+});
+</script>
+
+</body>
+</html>
